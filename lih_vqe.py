@@ -1,22 +1,3 @@
-"""LiH dissociation curve via VQE with a UCCSD ansatz.
-
-Pipeline (matches the project proposal):
-
-    1. PySCF: RHF + FCI + one- and two-electron MO integrals at each Li-H
-       distance.
-    2. Freeze the Li 1s core analytically (effective h_pq + inactive energy)
-       to keep the qubit count manageable.
-    3. Build the active-space second-quantized Hamiltonian directly from the
-       integrals using the Slater-Condon rules.
-    4. Map the FermionicOp to qubits with the Jordan-Wigner transformation.
-    5. UCCSD ansatz on top of the Hartree-Fock reference, optimized with
-       COBYLA on the Qiskit Aer statevector simulator.
-    6. Bootstrap optimal parameters to the next geometry to accelerate the
-       sweep across bond lengths.
-
-Outputs: dissociation_curve.png and correlation_energy.png.
-"""
-
 from __future__ import annotations
 
 import itertools
@@ -84,20 +65,10 @@ def freeze_core(
     n_orb: int,
     n_frozen: int,
 ) -> tuple[np.ndarray, np.ndarray, float, int]:
-    """Project closed-shell core orbitals into an inactive energy + effective h1.
-
-    With orbitals 0 .. n_frozen-1 doubly occupied and frozen at the HF values,
-    the active-space Hamiltonian is
-
-        H = E_inactive
-            + sum_{pq in active}  h_eff[p,q] * sum_sigma a^dag_{p,sigma} a_{q,sigma}
-            + 1/2 sum_{pqrs in active} (pq|rs) * sum_{sigma,tau} a^dag a^dag a a
-
-    where (i,j run over inactive / frozen orbitals)
-
-        E_inactive   = E_nuc + 2 sum_i h[i,i] + sum_ij [2 (ii|jj) - (ij|ji)]
-        h_eff[p, q]  = h[p, q] + sum_i [2 (pq|ii) - (pi|iq)]
     """
+    Freeze the lowest n_frozen spatial orbitals and return the effective active-space Hamiltonian.
+    """
+
     n_active = n_orb - n_frozen
 
     e_inactive = e_nuc
@@ -127,9 +98,6 @@ def build_fermionic_hamiltonian(
     Spin-orbital ordering: alpha occupies indices [0, n_orb), beta occupies
     [n_orb, 2 n_orb). The two-electron integrals are in chemist's notation
     (pq|rs); the chemist <-> physicist conversion fixes the operator order
-
-        H_2 = 1/2 sum_{pqrs} sum_{sigma,tau} (pq|rs)
-                  a^dag_{p,sigma} a^dag_{r,tau} a_{s,tau} a_{q,sigma}
 
     Same-spin terms with p == r or q == s vanish by Pauli exclusion and are
     skipped to keep the operator dictionary clean.
@@ -191,7 +159,7 @@ def run_vqe(
 
 # ---------------------------------------------------------------------------
 # Sanity check: exact diag of the active-space qubit Hamiltonian
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------- 
 def exact_ground_state(qubit_op) -> float:
     H = qubit_op.to_matrix()
     return float(np.linalg.eigvalsh(H)[0])
@@ -233,8 +201,7 @@ def main() -> None:
         # the full FCI is the small frozen-core error.
         e_active_diag = exact_ground_state(qubit_op) + e_inactive
 
-        # Active space and ansatz topology don't change across distances --
-        # build the ansatz once and reuse it.
+        # Active space and ansatz topology don't change across distances so we can reuse the same transpiled circuit and just update the parameters.
         if ansatz is None:
             ansatz = make_ansatz(n_active, n_particles, mapper, pass_mgr)
             initial_pt = np.zeros(ansatz.num_parameters)

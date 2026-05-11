@@ -1,6 +1,6 @@
 # LiH ground-state correlation energy via VQE
 
-CHEM 221B (UC Berkeley) project. We compute the ground-state energy of LiH
+CHEM 221B project. Code computes the ground-state energy of LiH
 along its bond-dissociation coordinate using a Variational Quantum Eigensolver
 (VQE) with a Unitary Coupled-Cluster Singles–Doubles (UCCSD) ansatz, and
 compare against Hartree–Fock and Full Configuration Interaction (FCI)
@@ -39,15 +39,6 @@ diverges from it.
    bootstrapping the previous distance's optimum as the initial point for the
    next.
 7. **Plot** dissociation curve and correlation-energy curve.
-
-## Files
-
-| File | Purpose |
-| --- | --- |
-| [lih_vqe.py](lih_vqe.py) | Main pipeline (single self-contained script). |
-| [CODE_EXPLANATION.md](CODE_EXPLANATION.md) | Detailed walk-through of every section in `lih_vqe.py`. |
-| [dissociation_curve.png](dissociation_curve.png) | Output: $E_\text{HF}$, $E_\text{FCI}$, $E_\text{VQE}$ vs. $r_\text{Li-H}$. |
-| [correlation_energy.png](correlation_energy.png) | Output: $E - E_\text{HF}$ vs. $r_\text{Li-H}$ for FCI and VQE. |
 
 ## How to run
 
