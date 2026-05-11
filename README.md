@@ -40,8 +40,6 @@ diverges from it.
    next.
 7. **Plot** dissociation curve and correlation-energy curve.
 
-
->>>>>>> b1d4d6e921fed2116f911dfefb6e3b1e99f9afa5
 ## How to run
 
 The included `venv/` already has every dependency pinned. From the project
