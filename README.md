@@ -40,14 +40,6 @@ diverges from it.
    next.
 7. **Plot** dissociation curve and correlation-energy curve.
 
-## Files
-
-| File | Purpose |
-| --- | --- |
-| [lih_vqe.py](lih_vqe.py) | Main pipeline (single self-contained script). |
-| [CODE_EXPLANATION.md](CODE_EXPLANATION.md) | Detailed walk-through of every section in `lih_vqe.py`. |
-| [dissociation_curve.png](dissociation_curve.png) | Output: $E_\text{HF}$, $E_\text{FCI}$, $E_\text{VQE}$ vs. $r_\text{Li-H}$. |
-| [correlation_energy.png](correlation_energy.png) | Output: $E - E_\text{HF}$ vs. $r_\text{Li-H}$ for FCI and VQE. |
 
 ## How to run
 
