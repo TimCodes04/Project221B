@@ -40,6 +40,10 @@ diverges from it.
    next.
 7. **Plot** dissociation curve and correlation-energy curve.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b1d4d6e921fed2116f911dfefb6e3b1e99f9afa5
 ## How to run
 
 The included `venv/` already has every dependency pinned. From the project
@@ -94,8 +98,7 @@ active-space Hamiltonian to within ~10 µHartree at every point.
 
 ## Notes / caveats
 
-- **Why `qiskit.primitives.StatevectorEstimator` is *not* used.** The
-  proposal asked specifically for the Aer statevector simulator. Aer's
+- **Why `qiskit.primitives.StatevectorEstimator` is *not* used.**  Aer's
   `EstimatorV2` does not understand the `EvolvedOps` instruction emitted by
   `qiskit_nature`'s UCCSD; the script works around this by transpiling the
   ansatz once into Aer's native gate set before VQE starts (see
